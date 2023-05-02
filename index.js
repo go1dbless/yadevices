@@ -4,7 +4,7 @@ const server = http.createServer()
 const axios = require('axios');
 const fs = require('fs');
 
-axios.defaults.headers.common['Authorization'] = `Bearer y0_AgAAAAAbar_TAAnZZAAAAADiVd0H3Tr-NAznQXqERqvtS2qUNb7GHAQ`;
+axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.API_KEY}`;
 axios.defaults.headers.common['Content-Type'] = `application/json`;
 axios.defaults.baseURL = "https://api.iot.yandex.net/v1.0";
 
@@ -30,7 +30,7 @@ server.on("request", async (req, res) => {
     }
 
     if (req.url === '/socket') {
-        const response = await axios.get('/devices/'+SOCKET_ID);
+        const response = await axios.get('/devices/' + SOCKET_ID);
         var newState = !response.data.capabilities.filter((e) => e.type === 'devices.capabilities.on_off')[0].state.value
 
         await axios.post('/devices/actions', {
@@ -53,7 +53,7 @@ server.on("request", async (req, res) => {
     }
 
     if (req.url === '/lamp') {
-        const response = await axios.get('/devices/'+LAMP_ID);
+        const response = await axios.get('/devices/' + LAMP_ID);
         var newState = !response.data.capabilities.filter((e) => e.type === 'devices.capabilities.on_off')[0].state.value
 
         await axios.post('/devices/actions', {
@@ -74,7 +74,6 @@ server.on("request", async (req, res) => {
         }
         );
     }
-
     res.statusCode = 200
     res.end()
 })
